@@ -1,4 +1,4 @@
-package net.kurochenko.chartviz.backend.dao;
+package net.kurochenko.chartviz.backend;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
 @Ignore
-public class AbstractDAOTest {
+public class AbstractSpringRunner {
 
 
 
