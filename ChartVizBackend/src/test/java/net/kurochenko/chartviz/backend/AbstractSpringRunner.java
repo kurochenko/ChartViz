@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @TransactionConfiguration(defaultRollback = true)
 @Transactional
 @Ignore
-public class AbstractSpringRunner {
+public abstract class AbstractSpringRunner {
 
 
 
