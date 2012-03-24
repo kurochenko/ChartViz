@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +26,11 @@ public class HibernateChartDataDAO implements ChartDataDAO {
     }
 
     @Override
+    public ChartData find(Long id) {
+        return em.find(ChartData.class, id);
+    }
+
+    @Override
     public void removeByChart(Chart chart) {
         Query q = em.createQuery("delete from ChartData d where d.chart = :chart");
         q.setParameter("chart", chart);
@@ -42,17 +46,12 @@ public class HibernateChartDataDAO implements ChartDataDAO {
 
     @Override
     public List<ChartData> findRange(Chart chart, Date from, Date to) {
-        if (from == null) {
-            from = Calendar.getInstance().getTime();
-        }
-        if (to == null) {
-            to = Calendar.getInstance().getTime();
-        }
-        
         Query q = em.createQuery("from ChartData d where d.chart = :chart and d.time >= :from and d.time <= :to order by d.time");
         q.setParameter("chart", chart)
          .setParameter("from", from)
          .setParameter("to", to);
+        System.out.println(from.getTime());
+        System.out.println(to.getTime());
 
         return q.getResultList();
     }    

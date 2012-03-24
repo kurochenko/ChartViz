@@ -12,6 +12,8 @@ import java.util.List;
 public interface ChartDataDAO {
 
     void create(ChartData data);
+    
+    ChartData find(Long id);
 
     void removeByChart(Chart chart);
 

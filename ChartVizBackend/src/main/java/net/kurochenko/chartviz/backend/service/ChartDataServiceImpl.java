@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class ChartDataServiceImpl implements ChartDataService {
             throw new IllegalArgumentException("From date is null");
         }
         
-        return chartDataDAO.findRange(chart, from, null);
+        return chartDataDAO.findRange(chart, from, Calendar.getInstance().getTime());
     }
 
     @Override
