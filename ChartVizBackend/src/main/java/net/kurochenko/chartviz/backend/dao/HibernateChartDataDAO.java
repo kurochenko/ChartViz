@@ -50,8 +50,6 @@ public class HibernateChartDataDAO implements ChartDataDAO {
         q.setParameter("chart", chart)
          .setParameter("from", from)
          .setParameter("to", to);
-        System.out.println(from.getTime());
-        System.out.println(to.getTime());
 
         return q.getResultList();
     }    
