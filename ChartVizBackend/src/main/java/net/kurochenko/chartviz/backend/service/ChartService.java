@@ -12,5 +12,5 @@ public interface ChartService {
     public void edit(Chart chart);
     public void remove(Chart chart);
     public Chart find(Long id);
-    public List<Chart> findAll(Chart chart);
+    public List<Chart> findAll();
 }

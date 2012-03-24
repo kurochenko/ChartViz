@@ -16,12 +16,20 @@ import java.util.List;
 @Transactional
 public class ChartServiceImpl implements ChartService {
 
-    @Autowired
     private ChartDAO chartDAO;
 
-    @Autowired
     private ChartDataDAO chartDataDAO;
 
+
+    @Autowired
+    public void setChartDAO(ChartDAO chartDAO) {
+        this.chartDAO = chartDAO;
+    }
+
+    @Autowired
+    public void setChartDataDAO(ChartDataDAO chartDataDAO) {
+        this.chartDataDAO = chartDataDAO;
+    }
 
     @Override
     public void create(Chart chart) {
@@ -63,11 +71,7 @@ public class ChartServiceImpl implements ChartService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Chart> findAll(Chart chart) {
-        if (chart == null) {
-            throw new IllegalArgumentException("Chart is null");
-        }
-
+    public List<Chart> findAll() {
         return chartDAO.findAll();
     }
 }
