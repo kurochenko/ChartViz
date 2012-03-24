@@ -1,5 +1,6 @@
 package net.kurochenko.chartviz.backend.dao;
 
+import net.kurochenko.chartviz.backend.AbstractSpringRunner;
 import net.kurochenko.chartviz.backend.entity.Chart;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * @author Andrej Kuročenko <kurochenko@mail.muni.cz>
  */
-public class ChartDAOTest extends AbstractDAOTest{
+public class ChartDAOTest extends AbstractSpringRunner {
 
     @Autowired
     private ChartDAO chartDAO;
