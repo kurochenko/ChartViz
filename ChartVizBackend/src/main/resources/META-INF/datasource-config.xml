@@ -3,6 +3,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="ds" class="com.liferay.portal.kernel.util.InfrastructureUtil" factory-method="getDataSource" />
+    <!--<bean id="ds" class="com.liferay.portal.kernel.util.InfrastructureUtil" factory-method="getDataSource" />-->
+
+    <bean id="ds"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/chartviz"/>
+        <property name="username" value="chartviz"/>
+        <property name="password" value="chartviz"/>
+    </bean>
 
 </beans>
