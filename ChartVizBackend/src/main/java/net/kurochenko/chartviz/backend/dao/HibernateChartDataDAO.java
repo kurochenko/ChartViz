@@ -35,7 +35,7 @@ public class HibernateChartDataDAO implements ChartDataDAO {
     
     @Override
     public List<ChartData> findAll(Chart chart) {
-        Query q = em.createQuery("select d from ChartData where d.chart = :chart order by d.time");
+        Query q = em.createQuery("from ChartData d where d.chart = :chart order by d.time");
         q.setParameter("chart", chart);
         return q.getResultList();
     }
@@ -49,7 +49,7 @@ public class HibernateChartDataDAO implements ChartDataDAO {
             to = Calendar.getInstance().getTime();
         }
         
-        Query q = em.createQuery("select d from ChartData where d.chart = :chart and d.time >= :from and d.time <= :to order by d.time");
+        Query q = em.createQuery("from ChartData d where d.chart = :chart and d.time >= :from and d.time <= :to order by d.time");
         q.setParameter("chart", chart)
          .setParameter("from", from)
          .setParameter("to", to);
