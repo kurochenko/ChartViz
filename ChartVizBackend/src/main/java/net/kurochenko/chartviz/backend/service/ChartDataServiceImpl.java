@@ -17,11 +17,15 @@ import java.util.List;
 @Service
 @Transactional
 public class ChartDataServiceImpl implements ChartDataService {
-    
-    @Autowired
+
     private ChartDataDAO chartDataDAO;
-    
-    
+
+
+    @Autowired
+    public void setChartDataDAO(ChartDataDAO chartDataDAO) {
+        this.chartDataDAO = chartDataDAO;
+    }
+
     @Override
     public void create(ChartData chartData) {
         if (chartData == null) {
@@ -38,18 +42,6 @@ public class ChartDataServiceImpl implements ChartDataService {
         }
         
         return chartDataDAO.findAll(chart);
-    }
-
-    @Override
-    public List<ChartData> findRange(Chart chart, Date from) {
-        if (chart == null) {
-            throw new IllegalArgumentException("Chart is null");
-        }
-        if (from == null) {
-            throw new IllegalArgumentException("From date is null");
-        }
-        
-        return chartDataDAO.findRange(chart, from, Calendar.getInstance().getTime());
     }
 
     @Override
