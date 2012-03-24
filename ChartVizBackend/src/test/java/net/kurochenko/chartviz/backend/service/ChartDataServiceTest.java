@@ -1,10 +1,12 @@
 package net.kurochenko.chartviz.backend.service;
 
+import net.kurochenko.chartviz.backend.AbstractMockInit;
 import net.kurochenko.chartviz.backend.dao.ChartDataDAO;
 import net.kurochenko.chartviz.backend.entity.Chart;
 import net.kurochenko.chartviz.backend.entity.ChartData;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import java.util.Date;
 
@@ -14,23 +16,19 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Andrej Kuročenko <andrej@kurochenko.net>
  */
-public class ChartDataServiceTest {
-    
-    private ChartDataServiceImpl chartDataService;
-    private ChartDataDAO chartDataDAO;
+public class ChartDataServiceTest extends AbstractMockInit {
 
-    private Chart chart;
-    private ChartData chartData;
+    private ChartDataServiceImpl chartDataService;
+    @Mock private ChartDataDAO chartDataDAO;
+
+    private Chart chart = new Chart();
+    private ChartData chartData = new ChartData();
+
     
     @Before
     public void setUp() {
-        chartDataDAO = mock(ChartDataDAO.class);
-
         chartDataService = new ChartDataServiceImpl();
         chartDataService.setChartDataDAO(chartDataDAO);
-
-        chart = new Chart();
-        chartData = new ChartData();
     }
     
     @Test(expected = IllegalArgumentException.class)

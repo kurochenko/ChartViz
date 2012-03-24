@@ -1,10 +1,12 @@
 package net.kurochenko.chartviz.backend.service;
 
+import net.kurochenko.chartviz.backend.AbstractMockInit;
 import net.kurochenko.chartviz.backend.dao.ChartDAO;
 import net.kurochenko.chartviz.backend.dao.ChartDataDAO;
 import net.kurochenko.chartviz.backend.entity.Chart;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -12,22 +14,17 @@ import static org.mockito.Mockito.verify;
 /**
  * @author Andrej Kuročenko <andrej@kurochenko.net>
  */
-public class ChartServiceTest {
+public class ChartServiceTest extends AbstractMockInit {
 
     private ChartServiceImpl chartService;
-    private ChartDAO chartDAO;
-    private ChartDataDAO chartDataDAO;
-    
-    private Chart chart;
+    @Mock private ChartDAO chartDAO;
+    @Mock private ChartDataDAO chartDataDAO;
+
+    private Chart chart = new Chart();
 
 
     @Before
     public void setUp() {
-        chart = new Chart();
-        
-        chartDAO = mock(ChartDAO.class);
-        chartDataDAO = mock(ChartDataDAO.class);
-        
         chartService = new ChartServiceImpl();
         chartService.setChartDAO(chartDAO);
         chartService.setChartDataDAO(chartDataDAO);
