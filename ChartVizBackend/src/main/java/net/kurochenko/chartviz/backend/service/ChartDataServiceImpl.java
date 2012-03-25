@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +32,15 @@ public class ChartDataServiceImpl implements ChartDataService {
         }
         
         chartDataDAO.create(chartData);
+    }
+
+    @Override
+    public void createList(List<ChartData> chartDataList) {
+        if (chartDataList == null) {
+            throw new IllegalArgumentException("Chart data list is null");
+        }
+
+        chartDataDAO.createList(chartDataList);
     }
 
     @Override

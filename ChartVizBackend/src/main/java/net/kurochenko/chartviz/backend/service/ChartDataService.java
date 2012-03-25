@@ -11,6 +11,7 @@ import java.util.List;
  */
 public interface ChartDataService {
     public void create(ChartData chartData);
+    public void createList(List<ChartData> chartDataList);
     public List<ChartData> findAll(Chart chart);
     public List<ChartData> findRange(Chart chart, Date from, Date to);
     

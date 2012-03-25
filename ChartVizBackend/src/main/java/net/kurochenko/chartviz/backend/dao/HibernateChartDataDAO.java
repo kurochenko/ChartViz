@@ -26,6 +26,13 @@ public class HibernateChartDataDAO implements ChartDataDAO {
     }
 
     @Override
+    public void createList(List<ChartData> chartDataList) {
+        for (ChartData data : chartDataList) {
+            create(data);
+        }
+    }
+
+    @Override
     public ChartData find(Long id) {
         return em.find(ChartData.class, id);
     }

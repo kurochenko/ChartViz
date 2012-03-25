@@ -8,9 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -40,6 +40,17 @@ public class ChartDataServiceTest extends AbstractMockInit {
     public void testCreate() {
         chartDataService.create(chartData);
         verify(chartDataDAO).create(chartData);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateListNull() {
+        chartDataService.createList(null);
+    }
+
+    @Test
+    public void testCreateList() {
+        chartDataService.createList(new ArrayList<ChartData>());
+        verify(chartDataDAO).createList(new ArrayList<ChartData>());
     }
 
     @Test(expected = IllegalArgumentException.class)

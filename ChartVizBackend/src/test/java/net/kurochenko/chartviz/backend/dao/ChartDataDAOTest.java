@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,6 +59,31 @@ public class ChartDataDAOTest extends AbstractSpringRunner {
         assertEquals(BigDecimal.valueOf(24.589), retrieved.getValue());
         assertEquals(chart1, retrieved.getChart());
         assertEquals(chartData, chartDataDAO.find(chartData.getId()));
+    }
+    
+    @Test
+    public void testCreateList() {
+        final ChartData chartData2 = new ChartData();
+        chartData2.setTime(new Date(1332589567500L));
+        chartData2.setValue(BigDecimal.valueOf(25.589));
+        chartData2.setChart(chart1);
+
+        final ChartData chartData3 = new ChartData();
+        chartData3.setTime(new Date(1332589567509L));
+        chartData3.setValue(BigDecimal.valueOf(26.589));
+        chartData3.setChart(chart2);
+        
+        List<ChartData> dataList = new ArrayList<ChartData>() {{
+            add(chartData);
+            add(chartData2);
+            add(chartData3);
+        }};
+
+        chartDataDAO.createList(dataList);
+
+        assertTrue(chartDataDAO.findAll(chart1).contains(chartData));
+        assertTrue(chartDataDAO.findAll(chart1).contains(chartData2));
+        assertTrue(chartDataDAO.findAll(chart2).contains(chartData3));
     }
 
     @Test
