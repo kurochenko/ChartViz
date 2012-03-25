@@ -10,6 +10,7 @@
     <version>1.0</version>
     <modules>
         <module>ChartVizBackend</module>
+        <module>ChartVizFrontend</module>
     </modules>
 
 
