@@ -3,6 +3,8 @@ package net.kurochenko.chartviz.backend.service;
 import net.kurochenko.chartviz.backend.dao.ChartDAO;
 import net.kurochenko.chartviz.backend.dao.ChartDataDAO;
 import net.kurochenko.chartviz.backend.entity.Chart;
+import net.kurochenko.chartviz.backend.entity.ChartDTO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,6 +69,21 @@ public class ChartServiceImpl implements ChartService {
         }
 
         return chartDAO.find(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ChartDTO findDTO(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Chart id is null");
+        } 
+        
+        Chart chart = chartDAO.find(id);
+        ChartDTO chartDTO = new ChartDTO();
+        BeanUtils.copyProperties(chart, chartDTO);
+        chartDTO.setData(chartDataDAO.findAll(chart));
+
+        return chartDTO;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.kurochenko.chartviz.backend.service;
 
 import net.kurochenko.chartviz.backend.entity.Chart;
+import net.kurochenko.chartviz.backend.entity.ChartDTO;
 
 import java.util.List;
 
@@ -12,5 +13,6 @@ public interface ChartService {
     public void edit(Chart chart);
     public void remove(Chart chart);
     public Chart find(Long id);
+    public ChartDTO findDTO(Long id);
     public List<Chart> findAll();
 }
