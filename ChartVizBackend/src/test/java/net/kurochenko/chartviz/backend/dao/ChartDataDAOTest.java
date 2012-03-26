@@ -35,10 +35,15 @@ public class ChartDataDAOTest extends AbstractSpringRunner {
         chart1 = new Chart();
         chart1.setName("Euro");
         chart1.setUnit("EUR");
+        chart1.setDomainAxeName("Time");
+        chart1.setRangeAxeName("Rate");
 
         chart2 = new Chart();
         chart2.setName("Dollar");
         chart2.setUnit("USD");
+        chart2.setDomainAxeName("Time2");
+        chart2.setRangeAxeName("Rate2");
+
 
         chartDAO.create(chart1);
         chartDAO.create(chart2);

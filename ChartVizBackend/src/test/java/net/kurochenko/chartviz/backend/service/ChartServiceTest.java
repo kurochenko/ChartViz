@@ -10,6 +10,7 @@ import org.mockito.Mock;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Andrej Kuročenko <andrej@kurochenko.net>
@@ -73,6 +74,20 @@ public class ChartServiceTest extends AbstractMockInit {
     public void testFind() {
         chartService.find(Long.MAX_VALUE);
         verify(chartDAO).find(Long.MAX_VALUE);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindDTONull() {
+        chartService.findDTO(null);
+    }
+
+    @Test
+    public void testFindDTO() {
+        when(chartDAO.find(Long.MAX_VALUE)).thenReturn(chart);
+
+        chartService.findDTO(Long.MAX_VALUE);
+        verify(chartDAO).find(Long.MAX_VALUE);
+        verify(chartDataDAO).findAll(chart);
     }
 
     @Test

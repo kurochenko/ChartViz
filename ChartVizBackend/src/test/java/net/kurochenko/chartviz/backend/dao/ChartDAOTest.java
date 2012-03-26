@@ -23,6 +23,8 @@ public class ChartDAOTest extends AbstractSpringRunner {
         chart = new Chart();
         chart.setName("Euro");
         chart.setUnit("EUR");
+        chart.setDomainAxeName("Time");
+        chart.setRangeAxeName("Rate");
     }
     
     @Test
@@ -32,6 +34,8 @@ public class ChartDAOTest extends AbstractSpringRunner {
         Chart retrieved = chartDAO.find(chart.getId());
         assertEquals("Euro", retrieved.getName());
         assertEquals("EUR", retrieved.getUnit());
+        assertEquals("Time", retrieved.getDomainAxeName());
+        assertEquals("Rate", retrieved.getRangeAxeName());
         assertEquals(chart, retrieved);
     }
 
@@ -41,12 +45,16 @@ public class ChartDAOTest extends AbstractSpringRunner {
         
         chart.setName("Dollar");
         chart.setUnit("USD");
+        chart.setDomainAxeName("Time2");
+        chart.setRangeAxeName("Rate2");
 
         chartDAO.edit(chart);
 
         Chart retrieved = chartDAO.find(chart.getId());
         assertEquals("Dollar", retrieved.getName());
         assertEquals("USD", retrieved.getUnit());
+        assertEquals("Time2", retrieved.getDomainAxeName());
+        assertEquals("Rate2", retrieved.getRangeAxeName());
     }
 
     @Test
@@ -54,6 +62,8 @@ public class ChartDAOTest extends AbstractSpringRunner {
         Chart chart2 = new Chart();
         chart2.setName("Dollar");
         chart2.setUnit("USD");
+        chart2.setDomainAxeName("Time2");
+        chart2.setRangeAxeName("Rate2");
 
         chartDAO.create(chart);
         chartDAO.create(chart2);
@@ -77,6 +87,8 @@ public class ChartDAOTest extends AbstractSpringRunner {
         Chart chart2 = new Chart();
         chart2.setName("Dollar");
         chart2.setUnit("USD");
+        chart2.setDomainAxeName("Time2");
+        chart2.setRangeAxeName("Rate2");
 
         chartDAO.create(chart);
         chartDAO.create(chart2);
@@ -90,6 +102,8 @@ public class ChartDAOTest extends AbstractSpringRunner {
         Chart chart2 = new Chart();
         chart2.setName("Dollar");
         chart2.setUnit("USD");
+        chart2.setDomainAxeName("Time2");
+        chart2.setRangeAxeName("Rate2");
 
         assertTrue(chartDAO.findAll().isEmpty());
 
