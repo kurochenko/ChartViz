@@ -37,6 +37,8 @@ public class Init {
 
             Chart chart = new Chart();
             chart.setName("Vývoj kurzu eura");
+            chart.setDomainAxeName("Den");
+            chart.setRangeAxeName("Kurz (Kč/€)");
             chart.setUnit("EUR");
             chartService.create(chart);
 
