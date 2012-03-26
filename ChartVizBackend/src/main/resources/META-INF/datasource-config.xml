@@ -6,19 +6,12 @@
 
     <!--<bean id="ds" class="com.liferay.portal.kernel.util.InfrastructureUtil" factory-method="getDataSource" />-->
 
-    <!--<bean id="ds"-->
-          <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<property name="driverClassName" value="org.postgresql.Driver"/>-->
-        <!--<property name="url" value="jdbc:postgresql://localhost:5432/chartviz"/>-->
-        <!--<property name="username" value="chartviz"/>-->
-        <!--<property name="password" value="chartviz"/>-->
-    <!--</bean>-->
-
-    <bean id="ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="org.hsqldb.jdbcDriver"/>
-        <property name="url" value="jdbc:hsqldb:target/chartviz"/>
-        <property name="username" value="sa"/>
-        <property name="password" value=""/>
+    <bean id="ds"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/chartviz"/>
+        <property name="username" value="chartviz"/>
+        <property name="password" value="chartviz"/>
     </bean>
 
 </beans>
