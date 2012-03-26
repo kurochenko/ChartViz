@@ -105,6 +105,10 @@ public class ChartDAOTest extends AbstractSpringRunner {
         chart2.setDomainAxeName("Time2");
         chart2.setRangeAxeName("Rate2");
 
+        for (Chart c : chartDAO.findAll()) {
+            System.out.println(c.getName());
+        }
+
         assertTrue(chartDAO.findAll().isEmpty());
 
         chartDAO.create(chart);

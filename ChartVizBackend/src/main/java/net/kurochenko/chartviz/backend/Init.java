@@ -29,7 +29,7 @@ public class Init {
     @Autowired
     private ChartDataService chartDataService;
 
-    @PostConstruct
+//    @PostConstruct
     public void fillDB() throws IOException, ParseException {
         if (chartService.findAll().isEmpty()) {
             String file = "/home/kurochenko/vals";
