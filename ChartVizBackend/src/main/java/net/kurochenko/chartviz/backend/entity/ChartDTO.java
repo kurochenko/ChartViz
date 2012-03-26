@@ -9,7 +9,7 @@ public class ChartDTO {
 
     private Long id;
     private String name;
-    private String baseAxeName;
+    private String domainAxeName;
     private String rangeAxeName;
     private String unit;
     private List<ChartData> data;
@@ -30,12 +30,12 @@ public class ChartDTO {
         this.name = name;
     }
 
-    public String getBaseAxeName() {
-        return baseAxeName;
+    public String getDomainAxeName() {
+        return domainAxeName;
     }
 
-    public void setBaseAxeName(String baseAxeName) {
-        this.baseAxeName = baseAxeName;
+    public void setDomainAxeName(String domainAxeName) {
+        this.domainAxeName = domainAxeName;
     }
 
     public String getRangeAxeName() {
@@ -69,7 +69,7 @@ public class ChartDTO {
 
         ChartDTO chartDTO = (ChartDTO) o;
 
-        if (baseAxeName != null ? !baseAxeName.equals(chartDTO.baseAxeName) : chartDTO.baseAxeName != null)
+        if (domainAxeName != null ? !domainAxeName.equals(chartDTO.domainAxeName) : chartDTO.domainAxeName != null)
             return false;
         if (data != null ? !data.equals(chartDTO.data) : chartDTO.data != null) return false;
         if (id != null ? !id.equals(chartDTO.id) : chartDTO.id != null) return false;
@@ -85,7 +85,7 @@ public class ChartDTO {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (baseAxeName != null ? baseAxeName.hashCode() : 0);
+        result = 31 * result + (domainAxeName != null ? domainAxeName.hashCode() : 0);
         result = 31 * result + (rangeAxeName != null ? rangeAxeName.hashCode() : 0);
         result = 31 * result + (unit != null ? unit.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
