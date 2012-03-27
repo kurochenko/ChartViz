@@ -28,7 +28,7 @@ import java.util.List;
 public class ChartCreator {
 
     /** Date format of time on domain axis */
-    public static final String AXIS_DATE_FORMAT = "d.MM";
+    public static final String AXIS_DATE_FORMAT = "MM/d";
 
     /** Tooltips of chart points */
     private List toolTips = new ArrayList();
