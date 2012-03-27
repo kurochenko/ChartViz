@@ -3,11 +3,11 @@ package net.kurochenko.chartviz.backend;
 import net.kurochenko.chartviz.backend.chart.ChartCreator;
 import net.kurochenko.chartviz.backend.entity.Chart;
 import net.kurochenko.chartviz.backend.entity.ChartDTO;
-import net.kurochenko.chartviz.backend.service.ChartDataService;
 import net.kurochenko.chartviz.backend.service.ChartService;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.entity.StandardEntityCollection;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author Andrej Kuročenko <andrej@kurochenko.net>
@@ -35,10 +37,9 @@ public class GraphController {
     @RequestMapping
     public String index(Model model) throws IOException {
         Chart chart = chartService.findAll().get(0);
-        ChartDTO chartDTO = chartService.findDTO(chart.getId());
 
         FileOutputStream os = new FileOutputStream(TEMP_IMAGE);
-        ChartRenderingInfo info = writeChart(chartDTO, os);
+        ChartRenderingInfo info = writeChart(getDTO(chart), os);
         os.close();
 
         model.addAttribute("chart", chart);
@@ -52,7 +53,11 @@ public class GraphController {
         response.setContentType("image/png");
 
         Chart chart = chartService.find(id);
-        writeChart(chartService.findDTO(chart.getId()), response.getOutputStream());
+        writeChart(getDTO(chart), response.getOutputStream());
+    }
+    
+    private ChartDTO getDTO(Chart chart) {
+        return chartService.findDTORange(chart.getId(), LocalDate.now().minusDays(30).toDate(), LocalDate.now().toDate());
     }
 
     private ChartRenderingInfo writeChart(ChartDTO chartDTO, OutputStream os) {

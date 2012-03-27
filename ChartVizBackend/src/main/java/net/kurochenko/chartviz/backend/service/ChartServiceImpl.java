@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -82,6 +83,29 @@ public class ChartServiceImpl implements ChartService {
         ChartDTO chartDTO = new ChartDTO();
         BeanUtils.copyProperties(chart, chartDTO);
         chartDTO.setData(chartDataDAO.findAll(chart));
+
+        return chartDTO;
+    }
+
+    @Override
+    public ChartDTO findDTORange(Long id, Date from, Date to) {
+        if (id == null) {
+            throw new IllegalArgumentException("Chart id is null");
+        }
+        if (from == null) {
+            throw new IllegalArgumentException("Chart data range [from] is null");
+        }
+        if (to == null) {
+            throw new IllegalArgumentException("Chart data range [to] is null");
+        }
+        if (from.after(to)) {
+            throw new IllegalArgumentException("[From] date is past [to] date");
+        }
+
+        Chart chart = chartDAO.find(id);
+        ChartDTO chartDTO = new ChartDTO();
+        BeanUtils.copyProperties(chart, chartDTO);
+        chartDTO.setData(chartDataDAO.findRange(chart, from, to));
 
         return chartDTO;
     }

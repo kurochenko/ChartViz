@@ -8,7 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import static org.mockito.Mockito.mock;
+import java.util.Date;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -88,6 +89,35 @@ public class ChartServiceTest extends AbstractMockInit {
         chartService.findDTO(Long.MAX_VALUE);
         verify(chartDAO).find(Long.MAX_VALUE);
         verify(chartDataDAO).findAll(chart);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindDTORangeNullChart() {
+        chartService.findDTORange(null, new Date(1332589567500L), new Date(1332589567506L));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindDTORangeNullFrom() {
+        chartService.findDTORange(Long.MAX_VALUE, null, new Date(1332589567506L));
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindDTORangeNullTo() {
+        chartService.findDTORange(Long.MAX_VALUE, new Date(1332589567500L), null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFindDTORangeFromAfterTo() {
+        chartService.findDTORange(Long.MAX_VALUE, new Date(1332589567501L), new Date(1332589567500L));
+    }
+
+    @Test
+    public void testFindDTORange() {
+        when(chartDAO.find(Long.MAX_VALUE)).thenReturn(chart);
+
+        chartService.findDTORange(Long.MAX_VALUE, new Date(1332589567500L), new Date(1332589567506L));
+        verify(chartDAO).find(Long.MAX_VALUE);
+        verify(chartDataDAO).findRange(chart, new Date(1332589567500L), new Date(1332589567506L));
     }
 
     @Test

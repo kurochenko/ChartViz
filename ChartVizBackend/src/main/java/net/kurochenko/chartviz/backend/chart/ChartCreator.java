@@ -57,7 +57,7 @@ public class ChartCreator {
         plot.getDomainAxis().setVerticalTickLabels(true);
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
-        axis.setTickUnit(new DateTickUnit(DateTickUnitType.DAY, 2));
+        axis.setTickUnit(new DateTickUnit(DateTickUnitType.DAY, 1));
         axis.setDateFormatOverride(new SimpleDateFormat(AXIS_DATE_FORMAT));
 
         plot.setRangeGridlinePaint(Color.lightGray);

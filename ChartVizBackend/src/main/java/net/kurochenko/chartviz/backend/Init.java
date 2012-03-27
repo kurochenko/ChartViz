@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,7 +60,11 @@ public class Init {
     
     public Map<String, String> getValues() {
         return new HashMap<String, String>(){{
-            put("23.3.2012","24.740");
+            put("27.3.2012","24.740");
+            put("26.3.2012","24.63");
+            put("25.3.2012","24.63");
+            put("24.3.2012","24.63");
+            put("23.3.2012","24.725");
             put("22.3.2012","24.780");
             put("21.3.2012","24.480");
             put("20.3.2012","24.490");
