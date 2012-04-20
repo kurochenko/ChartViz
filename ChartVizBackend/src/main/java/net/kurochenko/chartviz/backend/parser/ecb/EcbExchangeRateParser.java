@@ -49,22 +49,30 @@ public class EcbExchangeRateParser implements ExchangeRateParser{
     /**
      * URL path to XML file with currency rates
      */
-//    private static final String RATES_XML = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
-    private static final String RATES_XML = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
+    private static final String RATES_XML_DAILY = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+    private static final String RATES_XML_ALL = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
     public static final String DATE_XPATH = "/"+NS_GMS+":Envelope/"+NS_ECB+":Cube/"+NS_ECB+":Cube";
     public static final String CURRENCY_XPATH = "./"+NS_ECB+":Cube";
 
-
-    public ExchangeRateDTO parse() {
+    public ExchangeRateDTO parseActual() {
         try {
-            return rawParse();
+            return rawParse(RATES_XML_DAILY);
         } catch (XPathExpressionException e) {
             logger.error("Failed to evaluate XPath expression.", e);
         }
         return null;
     }
 
-    private ExchangeRateDTO rawParse() throws XPathExpressionException {
+    public ExchangeRateDTO parseAll() {
+        try {
+            return rawParse(RATES_XML_ALL);
+        } catch (XPathExpressionException e) {
+            logger.error("Failed to evaluate XPath expression.", e);
+        }
+        return null;
+    }
+
+    private ExchangeRateDTO rawParse(String xmlUrl) throws XPathExpressionException {
 
         ExchangeRateDTO result = new ExchangeRateDTO();
         Map<Date, Map<String, BigDecimal>> resultMap = new HashMap<Date, Map<String, BigDecimal>>();
@@ -76,7 +84,7 @@ public class EcbExchangeRateParser implements ExchangeRateParser{
         XPathExpression dateXPath =  xpath.compile(DATE_XPATH);
         XPathExpression currencyXPath = xpath.compile(CURRENCY_XPATH);
 
-        NodeList dateNodes = (NodeList) dateXPath.evaluate(getDocument(), XPathConstants.NODESET);
+        NodeList dateNodes = (NodeList) dateXPath.evaluate(getDocument(xmlUrl), XPathConstants.NODESET);
 
         for (int i = 0; i < dateNodes.getLength(); i++) {
             Map<String, BigDecimal> rates = new HashMap<String, BigDecimal>();
@@ -119,13 +127,13 @@ public class EcbExchangeRateParser implements ExchangeRateParser{
      * and parses it into {@code org.w3c.dom.Document}
      * @return parsed document or {@code null} when any error occurs
      */
-    private Document getDocument() {
+    private Document getDocument(String xmlUrl) {
 
         Document document = null;
         InputStream inputStream = null;
 
         try {
-            URL url = new URL(RATES_XML);
+            URL url = new URL(xmlUrl);
             inputStream = url.openStream();
 
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
