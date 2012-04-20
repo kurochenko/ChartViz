@@ -3,14 +3,13 @@ package net.kurochenko.chartviz.backend.parser.ecb;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -23,6 +22,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static net.kurochenko.chartviz.backend.parser.ecb.EcbNamespaceContext.NS_ECB;
+import static net.kurochenko.chartviz.backend.parser.ecb.EcbNamespaceContext.NS_GMS;
+
+
 /**
  * @author Andrej Kuročenko <kurochenko@mail.muni.cz>
  */
@@ -30,9 +33,6 @@ import java.util.Map;
 public class EcbExchangeRateParser implements ExchangeRateParser{
 
     public static Logger logger = Logger.getLogger(EcbExchangeRateParser.class);
-
-    /** Node name which contains currency rate or validity date */
-    public static final String XML_DATA_NODE_NAME = "Cube";
 
     /** Node attribute name which contains currency rate validity date */
     public static final String XML_TIME_ATTR_NAME = "time";
@@ -49,46 +49,52 @@ public class EcbExchangeRateParser implements ExchangeRateParser{
     /**
      * URL path to XML file with currency rates
      */
-    private static final String RATES_XML = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+//    private static final String RATES_XML = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml";
+    private static final String RATES_XML = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml";
+    public static final String DATE_XPATH = "/"+NS_GMS+":Envelope/"+NS_ECB+":Cube/"+NS_ECB+":Cube";
+    public static final String CURRENCY_XPATH = "./"+NS_ECB+":Cube";
 
 
-    /**
-     * Parses XML file with actual currency rates. XML file is loaded directly from URL defined in configuration
-     * property file
-     * @return parsed DTO object or {@code null} when any parse or IO errors occur
-     */
-    public ExchangeRateDTO parse()  {
+    public ExchangeRateDTO parse() {
+        try {
+            return rawParse();
+        } catch (XPathExpressionException e) {
+            logger.error("Failed to evaluate XPath expression.", e);
+        }
+        return null;
+    }
 
-        ExchangeRateDTO result = null;
-        Document doc = getDocument();
-        Map<String, BigDecimal> rates = new HashMap<String, BigDecimal>();
-        boolean error = false;
+    private ExchangeRateDTO rawParse() throws XPathExpressionException {
 
-        if (doc != null) {
-            result = new ExchangeRateDTO();
-            Element rootNode = doc.getDocumentElement();
-            NodeList dataNodeList = rootNode.getElementsByTagName(XML_DATA_NODE_NAME);
+        ExchangeRateDTO result = new ExchangeRateDTO();
+        Map<Date, Map<String, BigDecimal>> resultMap = new HashMap<Date, Map<String, BigDecimal>>();
 
-            for (int i = 0; i < dataNodeList.getLength(); i++) {
-                Node dataNode = dataNodeList.item(i);
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath xpath = factory.newXPath();
+        xpath.setNamespaceContext(new EcbNamespaceContext());
 
-                if (dataNode.hasAttributes()) {
-                    if (dataNode.getAttributes().getNamedItem(XML_TIME_ATTR_NAME) != null) {
-                        result.setDay(parseValidityDate(dataNode.getAttributes().getNamedItem(XML_TIME_ATTR_NAME).getNodeValue()));
-                        if (result.getDay() == null) {
-                            error = true;
-                        }
-                    } else {
-                        String key = dataNode.getAttributes().getNamedItem(XML_CURRENCY_ATTR_NAME).getNodeValue();
-                        BigDecimal value = new BigDecimal(dataNode.getAttributes().getNamedItem(XML_RATE_ATTR_NAME).getNodeValue());
-                        rates.put(key, value);
-                    }
-                }
+        XPathExpression dateXPath =  xpath.compile(DATE_XPATH);
+        XPathExpression currencyXPath = xpath.compile(CURRENCY_XPATH);
+
+        NodeList dateNodes = (NodeList) dateXPath.evaluate(getDocument(), XPathConstants.NODESET);
+
+        for (int i = 0; i < dateNodes.getLength(); i++) {
+            Map<String, BigDecimal> rates = new HashMap<String, BigDecimal>();
+            String time = dateNodes.item(i).getAttributes().getNamedItem(XML_TIME_ATTR_NAME).getNodeValue();
+            NodeList currencyNodes = (NodeList) currencyXPath.evaluate(dateNodes.item(i), XPathConstants.NODESET);
+
+            for (int j = 0; j < currencyNodes.getLength(); j++) {
+                rates.put(
+                        currencyNodes.item(j).getAttributes().getNamedItem(XML_CURRENCY_ATTR_NAME).getNodeValue(),
+                        new BigDecimal(currencyNodes.item(j).getAttributes().getNamedItem(XML_RATE_ATTR_NAME).getNodeValue())
+                );
             }
-            result.setRates(rates);
+
+            resultMap.put(parseValidityDate(time), rates);
         }
 
-        return error ? null : result;
+        result.setRates(resultMap);
+        return result;
     }
 
     /**
